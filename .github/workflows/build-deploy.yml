@@ -75,7 +75,7 @@ jobs:
     outputs:
       IMAGE_TAG: ${{ steps.setImageTag.outputs.IMAGE_TAG}}
 
-  deploy-to-SQL:
+  deploy:
     needs: [build]
     runs-on: ubuntu-18.04
 
@@ -98,13 +98,6 @@ jobs:
           connection-string: "Server=tcp:${{ env.SQL_SERVER }},1433;Initial Catalog=${{ env.DATABASENAME }};Persist Security Info=False;User ID=${{ secrets.SQL_USER }};Password=${{ secrets.SQL_PASSWORD }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
           dacpac-package: './myhealthclinic.dacpac'
 
-  deploy-to-AKS:
-    needs: [build, deploy-to-SQL]
-    runs-on: ubuntu-18.04
-
-    steps:
-      - uses: actions/checkout@main
-
       - name: Replace tokens in mhc-aks.yaml with env
         uses: cschleiden/replace-tokens@v1.1
         with:
@@ -113,14 +106,6 @@ jobs:
           files: '["mhc-aks.yaml"]'
         env:
           ACR: ${{ env.ACR }}
-
-      # https://docs.microsoft.com/ja-jp/azure/developer/github/connect-from-azure?tabs=azure-portal%2Clinux
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       # AKS
       - name: Prepeare k8s context
