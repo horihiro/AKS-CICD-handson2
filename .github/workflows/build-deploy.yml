@@ -92,7 +92,7 @@ jobs:
 
       # https://docs.microsoft.com/ja-jp/azure/azure-sql/database/connect-github-actions-sql-db
       - name: Apply Dacpac to Azure SQL server
-        uses: azure/sql-action@v1.1
+        uses: azure/sql-action@v1.2
         with:
           server-name: ${{ env.SQL_SERVER }}
           connection-string: "Server=tcp:${{ env.SQL_SERVER }},1433;Initial Catalog=${{ env.DATABASENAME }};Persist Security Info=False;User ID=${{ secrets.SQL_USER }};Password=${{ secrets.SQL_PASSWORD }};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
