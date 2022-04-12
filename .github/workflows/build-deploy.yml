@@ -77,7 +77,7 @@ jobs:
 
   deploy-to-SQL:
     needs: [build]
-    runs-on: windows-latest
+    runs-on: ubuntu-18.04
 
     steps:
       - uses: actions/checkout@main
